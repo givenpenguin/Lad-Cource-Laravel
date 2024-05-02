@@ -21,32 +21,32 @@ Route::prefix('user')
             Route::get('/{value}', ValueController::class)
                 ->name('info.value')
                 ->whereNumber('value');
-            Route::get('/{name}/{role}/{id?}', UserController::class)
-                ->name('user.show')
-                ->withoutMiddleware(CheckValue::class)
-                ->middleware(IsAdmin::class);
             Route::get('/{test}', TestController::class)
                 ->name('test')
                 ->whereAlpha('test')
                 ->middleware(TestMiddleware::class);
         });
-        Route::get('/{name}/{role}', UserController::class)
-            ->name('user.show')
-            ->whereIn('name', ['Alex', 'Bob', 'Clever'])
-            ->middleware(IsAdmin::class);
+        Route::get('/', [UserController::class, 'update'])
+            ->name('user.update');
+        Route::get('/id/{id}', [UserController::class, 'show'])
+            ->name('user.show');
     });
 
+Route::resource('users', UserController::class)
+    ->missing(function () {
+        dd('Элемент не найден');
+    });
 
-Route::get('/info', [InfoController::class, 'index']);
-Route::post('/info', [InfoController::class, 'index']);
-Route::put('/info', [InfoController::class, 'index']);
-Route::patch('/info', [InfoController::class, 'index']);
-Route::delete('/info', [InfoController::class, 'index']);
-Route::options('/info', [InfoController::class, 'index']);
-
-Route::match(['get', 'post'], '/info', function (){
-    dd('info');
-});
+//Route::get('/info', [InfoController::class, 'index']);
+//Route::post('/info', [InfoController::class, 'index']);
+//Route::put('/info', [InfoController::class, 'index']);
+//Route::patch('/info', [InfoController::class, 'index']);
+//Route::delete('/info', [InfoController::class, 'index']);
+//Route::options('/info', [InfoController::class, 'index']);
+//
+//Route::match(['get', 'post'], '/info', function (){
+//    dd('info');
+//});
 
 //Route::redirect('/user', '/owner'); //302
 //Route::Permanentredirect('/user', '/owner'); //301
