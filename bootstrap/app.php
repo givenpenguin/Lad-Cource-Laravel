@@ -7,6 +7,7 @@ use Illuminate\Cookie\Middleware\EncryptCookies;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
+use Illuminate\Foundation\Http\Middleware\ValidateCsrfToken;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\Support\Facades\Route;
 
@@ -30,7 +31,11 @@ return Application::configure(basePath: dirname(__DIR__))
 //        $middleware->prependToGroup('web', 'admin');
 //        $middleware->appendToGroup('web', EnsureTokenIsValid::class);
 //
-//        $middleware->web(remove: [StartSession::class]);
+        $middleware->web(remove: [ValidateCsrfToken::class]);
+
+        $middleware->encryptCookies(except: [
+            'CustomCookie',
+        ]);
 
 //        $middleware->alias([
 //            'role' => CheckRole::class,

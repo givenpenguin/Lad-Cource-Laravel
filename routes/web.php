@@ -11,9 +11,11 @@ use App\Http\Middleware\IsAdmin;
 use App\Http\Middleware\TestMiddleware;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', [IndexController::class, 'index'])
-    ->name('home')
-    ->middleware(EnsureTokenIsValid::class);
+Route::view('/', 'welcome');
+
+//Route::get('/', [IndexController::class, 'index'])
+//    ->name('home')
+//    ->middleware(EnsureTokenIsValid::class);
 
 Route::prefix('user')
     ->group(function () {
@@ -32,10 +34,13 @@ Route::prefix('user')
             ->name('user.show');
     });
 
-Route::resource('users', UserController::class)
-    ->missing(function () {
-        dd('Элемент не найден');
-    });
+//Route::resource('users', UserController::class)
+//    ->missing(function () {
+//        dd('Элемент не найден');
+//    });
+
+Route::resource('users', UserController::class);
+Route::resource('admin', UserController::class);
 
 //Route::get('/info', [InfoController::class, 'index']);
 //Route::post('/info', [InfoController::class, 'index']);
