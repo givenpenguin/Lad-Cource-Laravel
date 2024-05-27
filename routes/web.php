@@ -9,9 +9,30 @@ use App\Http\Middleware\CheckValue;
 use App\Http\Middleware\EnsureTokenIsValid;
 use App\Http\Middleware\IsAdmin;
 use App\Http\Middleware\TestMiddleware;
+use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
-Route::view('/', 'welcome');
+Route::get('/', function () {
+    $user = User::find(2);
+    $user->isActive = true;
+
+    Auth::login($user);
+    \Illuminate\Support\Facades\Session::put('status', 'active');
+
+    return view('index', [
+        'user' => $user,
+        'jobs' => [
+            'Задача 1',
+            'Задача 2',
+            'Задача 3',
+        ],
+    ]);
+});
+
+Route::get('/contact', function () {
+    return view('pages.contact.index');
+});
 
 //Route::get('/', [IndexController::class, 'index'])
 //    ->name('home')
