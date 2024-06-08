@@ -10,24 +10,41 @@ use App\Http\Middleware\EnsureTokenIsValid;
 use App\Http\Middleware\IsAdmin;
 use App\Http\Middleware\TestMiddleware;
 use App\Models\User;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
-    $user = User::find(2);
-    $user->isActive = true;
+//    $users = User::query()->with('posts')->get();
+//    return view('home', ['users' => $users]);
 
-    Auth::login($user);
-    \Illuminate\Support\Facades\Session::put('status', 'active');
+    $email1 = DB::table('users')->select('email')->where('id', 1)->first(); //stdObject
+    $email2 = User::query()->select('email')->where('id', 1)->first();
+    $email3 = User::query()->where('id', 1)->value('email');
+    dump($email1);
+    dump($email2);
+    dump($email3);
 
-    return view('index', [
-        'user' => $user,
-        'jobs' => [
-            'Задача 1',
-            'Задача 2',
-            'Задача 3',
-        ],
-    ]);
+    $emails1 = User::query()->pluck('email');
+    dump($emails1);
+
+    $emails2 = User::query()->chunk(2, function (Collection $collection) {
+        foreach ($collection as $item) {
+            //Отправить сообщение
+        }
+    });
+
+//    Auth::login($user);
+//    \Illuminate\Support\Facades\Session::put('status', 'active');
+//
+//    return view('index', [
+//        'user' => $user,
+//        'jobs' => [
+//            'Задача 1',
+//            'Задача 2',
+//            'Задача 3',
+//        ],
+//    ]);
 });
 
 Route::get('/contact', function () {
